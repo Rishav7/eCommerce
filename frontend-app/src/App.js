@@ -19,6 +19,8 @@ import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 
+//checking git
+
 const App = () => {
 	return (
 		<Router>
@@ -45,6 +47,8 @@ const App = () => {
 					<Route path='/admin/orderlist' component={OrderListScreen} />
 
 					<Route path='/cart/:id?' component={CartScreen} />
+					<Route path='/search/:keyword' component={HomeScreen} />
+
 					<Route exact path='/' component={HomeScreen} />
 				</Container>
 			</main>
