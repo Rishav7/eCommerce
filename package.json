@@ -11,7 +11,7 @@
         "dev": "concurrently \"npm run server\" \"npm run client\"",
         "data:imports": "node backend/seeders",
         "data:destroy": "node backend/seeders -d",
-        "heroku-postbuild": "NPM_CONFIG_PRODUCTION = false npm install --prefix frontend-app && npm run --prefix frontend-app"
+        "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend-app && npm run build --prefix frontend-app"
     },
     "author": "Rishav",
     "license": "ISC",
