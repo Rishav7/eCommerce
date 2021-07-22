@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap'
 
 const SearchBox = ({ history }) => {
 	const [keyword, setKeyword] = useState('')
+
 	const submitHandler = (e) => {
 		e.preventDefault()
 		if (keyword.trim()) {
@@ -12,18 +13,15 @@ const SearchBox = ({ history }) => {
 		}
 	}
 	return (
-		<Form onSubmit={submitHandler} className='d-flex p-2 '>
+		<Form onSubmit={submitHandler} className='d-flex mb-3'>
 			<Form.Control
-				type='search'
-				placeholder='Search Product....'
-				className='mr-2'
-				aria-label='Search'
+				type='text'
+				name='q'
+				onChange={(e) => setKeyword(e.target.value)}
+				placeholder='Search Products...'
+				className='mr-sm-1 ml-sm-3 '
 			></Form.Control>
-			<Button
-				type='submit'
-				variant='outline-success'
-				className='mr-sm-2 ml-sm-5 '
-			>
+			<Button type='submit' variant='success' className='p-2 m-2'>
 				Search
 			</Button>
 		</Form>

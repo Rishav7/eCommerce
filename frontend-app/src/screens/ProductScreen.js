@@ -12,6 +12,7 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
+import Meta from './Meta'
 
 const ProductScreen = ({ history, match }) => {
 	const [qty, setQty] = useState(1)
@@ -60,6 +61,7 @@ const ProductScreen = ({ history, match }) => {
 
 	return (
 		<>
+			<Meta title={product.name}></Meta>
 			<Link className='btn btn-dark my-2 ' to='/'>
 				Go Back
 			</Link>
@@ -127,7 +129,6 @@ const ProductScreen = ({ history, match }) => {
 																</option>
 															)
 														)}
-														
 													</Form.Control>
 												</Col>
 											</Row>

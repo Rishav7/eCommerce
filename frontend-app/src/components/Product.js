@@ -6,12 +6,15 @@ import Rating from '../components/Rating'
 
 const Product = ({ product }) => {
 	return (
-		<Card className='my-3 p-3 rounded '>
+		<Card className='my-2 p-2 rounded '>
 			<Link to={`/product/${product._id}`}>
 				<Card.Img
-					className=' p-1 rounded '
+					className='p-2 rounded '
 					src={product.image}
 					variant='top'
+					style={{
+						height: '180px',
+					}}
 				></Card.Img>
 			</Link>
 

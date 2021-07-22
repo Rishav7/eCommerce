@@ -4,6 +4,9 @@ import Product from '../models/productModel.js'
 // fettch all product --->access public ==>routes : /api/products
 
 const getProducts = asyncHandler(async (req, res) => {
+	const pageSize = 6
+	const page = Number(req.query.pageNumber) || 1
+
 	const keyword = req.query.keyword
 		? {
 				name: {
@@ -12,8 +15,13 @@ const getProducts = asyncHandler(async (req, res) => {
 				},
 		  }
 		: {}
+
+	const count = await Product.count({ ...keyword })
 	const products = await Product.find({ ...keyword })
-	res.json(products)
+		.limit(pageSize)
+		.skip(pageSize * (page - 1))
+
+	res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 // fetch all product by id--->access public ==>routes : /api/products
 
@@ -95,9 +103,6 @@ const updateProduct = asyncHandler(async (req, res) => {
 //routes POST /api/products/:id/review
 //access private
 
-// @desc    Create new review
-// @route   POST /api/products/:id/reviews
-// @access  Private
 const createProductReview = asyncHandler(async (req, res) => {
 	const { rating, comment } = req.body
 
@@ -136,6 +141,14 @@ const createProductReview = asyncHandler(async (req, res) => {
 	}
 })
 
+// @desc    Get top rated products
+// @route   GET /api/products/top
+// @access  Public
+const getTopProducts = asyncHandler(async (req, res) => {
+	const products = await Product.find({}).sort({ rating: -1 }).limit(3)
+
+	res.json(products)
+})
 export {
 	getProducts,
 	getProductById,
@@ -143,4 +156,5 @@ export {
 	createProduct,
 	updateProduct,
 	createProductReview,
+	getTopProducts,
 }

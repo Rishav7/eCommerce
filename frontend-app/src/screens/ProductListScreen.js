@@ -11,11 +11,13 @@ import {
 } from '../actions/productActions'
 //to reset the product
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
+import Paginate from '../components/Paginate'
 const ProductListScreen = ({ history, match }) => {
+	const pageNumber = match.params.pageNumber || 1
 	const dispatch = useDispatch()
 
 	const productList = useSelector((state) => state.productList)
-	const { loading, error, products } = productList
+	const { loading, error, products, page, pages } = productList
 
 	const userLogin = useSelector((state) => state.userLogin)
 	const { userInfo } = userLogin
@@ -46,7 +48,7 @@ const ProductListScreen = ({ history, match }) => {
 		if (successCreate) {
 			history.push(`/admin/product/${createdProduct._id}/edit`)
 		} else {
-			dispatch(listProducts())
+			dispatch(listProducts('', pageNumber))
 		}
 	}, [
 		dispatch,
@@ -55,6 +57,7 @@ const ProductListScreen = ({ history, match }) => {
 		successDelete,
 		successCreate,
 		createdProduct,
+		pageNumber,
 	])
 
 	const deleteHandler = (id) => {
@@ -90,55 +93,61 @@ const ProductListScreen = ({ history, match }) => {
 			) : error ? (
 				<Message variant='danger'>{error}</Message>
 			) : (
-				<Table striped bordered hover responsive className='table-sm'>
-					<thead>
-						<tr>
-							<th>Image</th>
-							<th>ID</th>
-							<th>NAME</th>
-							<th>Price</th>
-							<th>Category</th>
-							<th>Brand</th>
-						</tr>
-					</thead>
-					<tbody>
-						{products &&
-							products.map((product) => (
-								<tr key={product._id}>
-									<td>
-										{' '}
-										<Image
-											src={product.image}
-											alt={product.name}
-											fluid
-											rounded
-										/>
-									</td>
+				<>
+					<Table striped bordered hover responsive className='table-sm'>
+						<thead>
+							<tr>
+								<th>Image</th>
+								<th>ID</th>
+								<th>NAME</th>
+								<th>Price</th>
+								<th>Category</th>
+								<th>Brand</th>
+							</tr>
+						</thead>
+						<tbody>
+							{products &&
+								products.map((product) => (
+									<tr key={product._id}>
+										<td>
+											<Image
+												className='p-2 rounded '
+												variant='top'
+												style={{
+													height: '150px',
+												}}
+												src={product.image}
+												alt={product.name}
+												fluid
+											/>
+										</td>
 
-									<td>{product._id}</td>
-									<td>{product.name}</td>
-									<td>₹{product.price}</td>
-									<td>{product.category}</td>
-									<td>{product.brand}</td>
+										<td>{product._id}</td>
+										<td>{product.name}</td>
+										<td>₹{product.price}</td>
+										<td>{product.category}</td>
+										<td>{product.brand}</td>
 
-									<td>
-										<LinkContainer to={`/admin/product/${product._id}/edit`}>
-											<Button variant='light' className='btn-sm'>
-												<i className='fas fa-edit'></i>
+										<td>
+											<LinkContainer to={`/admin/product/${product._id}/edit`}>
+												<Button variant='light' className='btn-sm'>
+													<i className='fas fa-edit'></i>
+												</Button>
+											</LinkContainer>
+											<Button
+												variant='danger'
+												className='btn-sm'
+												onClick={() => deleteHandler(product._id)}
+											>
+												<i className='fas fa-trash'></i>
 											</Button>
-										</LinkContainer>
-										<Button
-											variant='danger'
-											className='btn-sm'
-											onClick={() => deleteHandler(product._id)}
-										>
-											<i className='fas fa-trash'></i>
-										</Button>
-									</td>
-								</tr>
-							))}
-					</tbody>
-				</Table>
+										</td>
+									</tr>
+								))}
+						</tbody>
+					</Table>
+					<Paginate page={page} pages={pages} isAdmin={true} />
+				</>
 			)}
 		</>
 	)
